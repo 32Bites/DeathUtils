@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Maven: com.google.code.gson:gson:2.8.0">
+    <archive path="C:/Users/noahs/.m2/repository/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar" />
+  </library>
+  <library name="Maven: com.google.guava:guava:21.0">
+    <archive path="C:/Users/noahs/.m2/repository/com/google/guava/guava/21.0/guava-21.0.jar" />
+  </library>
+  <library name="Maven: commons-lang:commons-lang:2.6">
+    <archive path="C:/Users/noahs/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" />
+  </library>
+  <library name="Maven: net.md-5:bungeecord-chat:1.15-SNAPSHOT">
+    <archive path="C:/Users/noahs/.m2/repository/net/md-5/bungeecord-chat/1.15-SNAPSHOT/bungeecord-chat-1.15-20200223.233044-59.jar" />
+  </library>
+  <library name="Maven: org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT">
+    <archive path="C:/Users/noahs/.m2/repository/org/spigotmc/spigot-api/1.15.2-R0.1-SNAPSHOT/spigot-api-1.15.2-R0.1-20200223.080703-65.jar" />
+  </library>
+  <library name="Maven: org.yaml:snakeyaml:1.25">
+    <archive path="C:/Users/noahs/.m2/repository/org/yaml/snakeyaml/1.25/snakeyaml-1.25.jar" />
+  </library>
+</eclipse-userlibraries>
+

@@ -1,0 +1,18 @@
+name: DeathUtils
+version: ${project.version}
+main: party.thenoah.deathutils.DeathUtils
+api-version: 1.13
+prefix: DeathUtils
+authors: [Noah_Shanaberger]
+description: Provides utilities to help with player deaths
+website: 32bites.party
+
+commands:
+  deathpoint:
+    description: Teleports you to your deathpoint.
+    permission: deathutils.deathpoint
+    usage: /deathpoint
+permissions:
+  deathutils.deathpoint:
+    description: Permission to use /deathpoint.
+    default: true
