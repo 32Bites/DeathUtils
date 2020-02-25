@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PlayerEventListener implements Listener {
@@ -39,6 +40,17 @@ public class PlayerEventListener implements Listener {
 
         String message = String.format("%sYou died at: %sX:%d Y:%d Z:%d%s", ChatColor.RED, ChatColor.GREEN, x, y, z, ChatColor.RESET);
         event.getPlayer().sendMessage(message);
+        if (event.getPlayer().hasPermission("deathutils.deathpoint")) {
+            message = String.format("Use %s/deathpoint%s to teleport you where you died.", ChatColor.GREEN, ChatColor.RESET);
+            event.getPlayer().sendMessage(message);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        int index = getPlayerIndex(player.getName());
+        Config.players.remove(index);
     }
 
     public static boolean doesPlayerExist(String name) {
