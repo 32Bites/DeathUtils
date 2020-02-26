@@ -15,13 +15,9 @@ public class CommandListener implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("deathpoint")) {
                 Player player = (Player) sender;
                 int index = PlayerEventListener.getPlayerIndex(player.getName());
-                PlayerInfo playerInfo = Config.players.get(index);
-                long x = playerInfo.getDeathLocation().x;
-                long y = playerInfo.getDeathLocation().y;
-                long z = playerInfo.getDeathLocation().z;
-
-                Location loc = new Location(getServer().getWorld(playerInfo.getDeathLocation().world), x, y, z);
-                player.teleport(loc);
+                PlayerInfo playerInfo = DeathUtils.players.get(index);
+                player.teleport(playerInfo.getDeathLocation());
+                return true;
             }
         }
         return false;

@@ -1,8 +1,10 @@
 package party.thenoah.deathutils;
 
+import org.bukkit.Location;
+
 public class PlayerInfo {
     public String name;
-    public DeathLocation deathLocation;
+    public Location deathLocation;
 
     PlayerInfo(String name) {
         this.name = name;
@@ -12,11 +14,11 @@ public class PlayerInfo {
         return name;
     }
 
-    public DeathLocation getDeathLocation() {
+    public Location getDeathLocation() {
         return deathLocation;
     }
 
-    public void setDeathLocation(DeathLocation deathLocation) {
+    public void setDeathLocation(Location deathLocation) {
         this.deathLocation = deathLocation;
     }
 }

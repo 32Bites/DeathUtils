@@ -1,6 +1,7 @@
 package party.thenoah.deathutils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,18 +15,13 @@ public class PlayerEventListener implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            DeathLocation deathLocation = new DeathLocation(event.getEntity().getLocation().getWorld().getName(),
-                    event.getEntity().getLocation().getBlockX(),
-                    event.getEntity().getLocation().getBlockY(),
-                    event.getEntity().getLocation().getBlockZ());
-
             if (doesPlayerExist(player.getName())) {
                 int index = getPlayerIndex(player.getName());
-                Config.players.get(index).setDeathLocation(deathLocation);
+                DeathUtils.players.get(index).setDeathLocation(player.getLocation());
             } else {
                 PlayerInfo playerInfo = new PlayerInfo(player.getName());
-                playerInfo.setDeathLocation(deathLocation);
-                Config.players.add(playerInfo);
+                playerInfo.setDeathLocation(player.getLocation());
+                DeathUtils.players.add(playerInfo);
             }
         }
     }
@@ -33,12 +29,16 @@ public class PlayerEventListener implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         int index = getPlayerIndex(event.getPlayer().getName());
-        PlayerInfo playerInfo = Config.players.get(index);
-        long x = playerInfo.getDeathLocation().x;
-        long y = playerInfo.getDeathLocation().y;
-        long z = playerInfo.getDeathLocation().z;
+        PlayerInfo playerInfo = DeathUtils.players.get(index);
+        Location deathLocation = playerInfo.getDeathLocation();
 
-        String message = String.format("%sYou died at: %sX:%d Y:%d Z:%d%s", ChatColor.RED, ChatColor.GREEN, x, y, z, ChatColor.RESET);
+        String message = String.format("%sYou died at: %sX:%d Y:%d Z:%d%s",
+                ChatColor.RED,
+                ChatColor.GREEN,
+                deathLocation.getBlockX(),
+                deathLocation.getBlockY(),
+                deathLocation.getBlockZ(),
+                ChatColor.RESET);
         event.getPlayer().sendMessage(message);
         if (event.getPlayer().hasPermission("deathutils.deathpoint")) {
             message = String.format("Use %s/deathpoint%s to teleport you where you died.", ChatColor.GREEN, ChatColor.RESET);
@@ -50,11 +50,13 @@ public class PlayerEventListener implements Listener {
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         int index = getPlayerIndex(player.getName());
-        Config.players.remove(index);
+        if (DeathUtils.players.size() > 0) {
+            DeathUtils.players.remove(index);
+        }
     }
 
     public static boolean doesPlayerExist(String name) {
-        for (PlayerInfo playerInfo : Config.players) {
+        for (PlayerInfo playerInfo : DeathUtils.players) {
             if (playerInfo.name.equals(name)) {
                 return true;
             }
@@ -63,8 +65,8 @@ public class PlayerEventListener implements Listener {
     }
 
     public static int getPlayerIndex(String name) {
-        for (int i = 0; i <= Config.players.size(); i++) {
-            if (Config.players.get(i).getName().equals(name)) {
+        for (int i = 0; i <= DeathUtils.players.size(); i++) {
+            if (DeathUtils.players.get(i).getName().equals(name)) {
                 return i;
             }
         }
