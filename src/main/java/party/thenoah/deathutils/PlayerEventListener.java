@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -15,14 +16,8 @@ public class PlayerEventListener implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (doesPlayerExist(player.getName())) {
-                int index = getPlayerIndex(player.getName());
-                DeathUtils.players.get(index).setDeathLocation(player.getLocation());
-            } else {
-                PlayerInfo playerInfo = new PlayerInfo(player.getName());
-                playerInfo.setDeathLocation(player.getLocation());
-                DeathUtils.players.add(playerInfo);
-            }
+            int index = getPlayerIndex(player.getName());
+            DeathUtils.players.get(index).setDeathLocation(player.getLocation());
         }
     }
 
@@ -49,19 +44,21 @@ public class PlayerEventListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        int index = getPlayerIndex(player.getName());
-        if (DeathUtils.players.size() > 0) {
-            DeathUtils.players.remove(index);
-        }
+        deletePlayer(player.getName());
     }
 
-    public static boolean doesPlayerExist(String name) {
-        for (PlayerInfo playerInfo : DeathUtils.players) {
-            if (playerInfo.name.equals(name)) {
-                return true;
-            }
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        PlayerInfo playerInfo = new PlayerInfo(player.getName());
+        Location deathLocation = player.getWorld().getSpawnLocation();
+
+        if (player.getBedSpawnLocation() != null) {
+            deathLocation = player.getBedSpawnLocation();
         }
-        return false;
+        playerInfo.setDeathLocation(deathLocation);
+
+        DeathUtils.players.add(playerInfo);
     }
 
     public static int getPlayerIndex(String name) {
@@ -71,5 +68,15 @@ public class PlayerEventListener implements Listener {
             }
         }
         return -1;
+    }
+
+    public static void deletePlayer(String name) {
+        for (PlayerInfo player : DeathUtils.players) {
+            if (player.getName() == name) {
+                DeathUtils.players.remove(player);
+                break;
+            }
+        }
+        return;
     }
 }
